@@ -35,6 +35,14 @@ define( [], function () {
 	// New Accordion Panel
 	// ****************************************************************************************
 
+// General properties
+	var rectUseLasso = {
+		ref: "rectUseLasso",
+		label: "Use Lasso",
+		type: "boolean",
+		defaultValue: "true"
+	};	
+	
 // Rectangle properties
 	var propRectWidthHeight = {
 		ref: "rectWidthHeight",
@@ -83,13 +91,21 @@ define( [], function () {
 		defaultValue: "gray"		
 	};
 	
-	var propRectSelectingColor = {
+	var propRectSelectingActiveColor = {
 		ref: "rectSelectingColor",
-		label: "Selecting Color",
+		label: "Selecting Active Color",
 		type: "string",
 		expression: "optional",
 		defaultValue: "yellow"
 	};
+	
+	var propRectSelectingNonActiveColor = {
+		ref: "rectSelectingNullColor",
+		label: "Selecting Non Active Color",
+		type: "string",
+		expression: "optional",
+		defaultValue: "gray"
+	};	
 	
 // Titles properties	
 	var propTitleColor = {
@@ -171,8 +187,15 @@ define( [], function () {
 			myCustomSection: {
 				//type: "items", //<== not necessary to define "items"
 				component: "expandable-items",
-				label: "My Accordion Section",
+				label: "Extension properties",
 				items: {
+					header0: {
+						type: "items",
+						label: "General",
+						items: {
+							header0_item1: rectUseLasso
+						}
+					},					
 					header1: {
 						type: "items",
 						label: "Rectangles",
@@ -183,7 +206,8 @@ define( [], function () {
 							header1_item4: propRectBorderWidth,
 							header1_item5: propRectFill,
 							header1_item6: propNullFill,
-							header1_item7: propRectSelectingColor							
+							header1_item7: propRectSelectingActiveColor,							
+							header1_item8: propRectSelectingNonActiveColor,
 						}
 					},
 					header2: {

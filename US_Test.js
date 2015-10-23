@@ -23,6 +23,8 @@ define( [
 		  var width = 800;
 		  var height = 500;
 		  
+		  var gnrlUseLasso = layout.rectUseLasso;
+		  
 		  var rectWH = layout.rectWidthHeight.split('/');	
 		  var rectWidth = parseInt( rectWH[0] );
 		  var rectHeight = parseInt( rectWH[1] );
@@ -33,6 +35,7 @@ define( [
 		  var rectFill = layout.rectFill;
 		  var rectNullFill = layout.rectNullFill;
 		  var rectSelectingColor = layout.rectSelectingColor;
+		  var rectSelectingNullColor = layout.rectSelectingNullColor;		  
 		  
 		  var titleColor = layout.titleColor;
 		  var titleSize = layout.titleSize;
@@ -43,7 +46,7 @@ define( [
 		  var valueFamily = layout.valuesFontFamily;
 		  
 		  var id = 1;
-		  var binningMode = 10
+		  var binningMode = -1
 		  
 		  var hiddenId = [1,2,3,4,5,6,7,8,9,10,11,13,14,15,16,17,18,20,21,22,25,33,36,37,49,60,61,62,71,72,73,74,75,76,91,82,83,84,87,88,90,92,93,95,96];
 		  
@@ -80,7 +83,7 @@ define( [
 				if (binningMode > 0) {
 					// Area binning mode
 					lasso.items()
-						.style("fill",null);
+						.style("fill",rectFill);
 				}
 
 				lasso.items()
@@ -92,7 +95,7 @@ define( [
 		lasso.items().filter(function(d) {return d.possible===true})
 			.classed({"not_possible":false,"possible":true})
 			.style('fill', rectSelectingColor)
-			.style("stroke-width", 4)			
+			//.style("stroke-width", 4)			
 			;
 
 		// Style the not possible dot
@@ -102,7 +105,7 @@ define( [
 
 	var lasso_end = function(data) {
 		var selectedItems = lasso.items().filter(function(d) {return d.selected===true});	
-		console.log(selectedItems)
+		//console.log(selectedItems)
 		if (selectedItems[0].length > 0) {			
 			// Set up an array to store the data points in the selected hexagon
 			var selectarray = [];
@@ -117,10 +120,10 @@ define( [
 					selectarray.push( parseInt(t) )
 				//}
 			}
-			console.log(selectarray);
+			//console.log(selectarray);
 			
 			//Make the selections
-			self.selectValues(0,selectarray,false);
+			self.selectValues(0,selectarray,true);
 		} else {
 			if (binningMode > 0) {
 				lasso.items()
@@ -128,8 +131,6 @@ define( [
 			}
 		}
 	};			
-			
-		  
 
 			var self = this,
 				dimensions = layout.qHyperCube.qDimensionInfo,
@@ -200,8 +201,7 @@ define( [
 												} catch (ex) {
 													
 												}
-											//}
-										
+											//}										
 										})
 										.style("fill", function(d) {
 										  if(dataObject) {
@@ -224,10 +224,20 @@ define( [
 										.style("stroke", rectBorderColor)
 										.style("stroke-width", rectBorderWidth)
 										.on({
-											  "click":  function() {  
+											  "click":  function( d ) {  
 												var elemNo = $(this);
-												self.selectValues( 0, [ parseInt(elemNo.attr('elemno')) ], true );
-												d3.select(this).style('fill', rectSelectingColor);
+												
+												if( elemNo.attr('elemno') ) {
+													self.selectValues( 0, [ parseInt(elemNo.attr('elemno')) ], true );
+													var selected = elemNo[0].outerHTML.indexOf(rectSelectingColor);
+													
+													if( elemNo[0].outerHTML.indexOf(rectSelectingColor) > -1 ) {
+														d3.select(this).style('fill', rectFill);
+													} else {
+														d3.select(this).style('fill', rectSelectingColor);
+													}
+												}
+												
 											  }, 
 										});
 				}
@@ -235,18 +245,20 @@ define( [
 			  }
 			}
 
-			var lasso_area = d3.selectAll("rect");
-			var lasso = d3.lasso()
-				  .closePathDistance(75)
-				  .closePathSelect(true)
-				  .hoverSelect(true)
-				  .area(lasso_area)
-				  .on("start",lasso_start)
-				  .on("draw",lasso_draw)
-				  .on("end",lasso_end);
+			if( gnrlUseLasso == true ) {
+				var lasso_area = d3.selectAll("rect");
+				var lasso = d3.lasso()
+					  .closePathDistance(75)
+					  .closePathSelect(true)
+					  .hoverSelect(true)
+					  .area(lasso_area)
+					  .on("start",lasso_start)
+					  .on("draw",lasso_draw)
+					  .on("end",lasso_end);
 
-				  svg.call(lasso);	
-			lasso.items(d3.selectAll("rect"));					
+				svg.call(lasso);	
+				lasso.items(d3.selectAll("rect"));
+			}
 		}
 	};
 
