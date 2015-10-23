@@ -1,47 +1,15 @@
-define( ["jquery", "./d3.min", 'text!./styles.css' ], function ( $, cssContent ) {
+define( [
+			"jquery",
+			'./properties',
+			'./initialproperties',
+			'text!./styles.css',
+			"./d3.min"
+], function ( $, props, initProps, cssContent, d3 ) {
 	'use strict';
 	//$('<link rel="stylesheet" type="text/css" href="/extensions/US_Test/styles.css">').appendTo("head");
 	return {
-		initialProperties: {
-			qHyperCubeDef: {
-				qDimensions: [],
-				qMeasures: [],
-				qInitialDataFetch: [{
-					qWidth: 1,
-					qHeight: 100
-				}]
-			}
-		},
-		//property panel
-		definition: {
-			type: "items",
-			component: "accordion",
-			items: {
-				dimensions: {
-					uses: "dimensions",
-					min: 1,
-					max: 1
-				},
-				measures: {
-					uses: "measures",
-					min: 1,
-					max: 1
-				},
-				sorting: {
-					uses: "sorting"
-				},
-				settings: {
-					uses: "settings"
-				},
-				color: {  
-                    ref: "color",  
-                    translation: "properties.color",  
-                    type: "integer",  
-                    component: "color-picker",  
-                    defaultValue: 2  
-                },  			  
-			}
-		},
+		definition: props,
+        initialProperties: initProps,
 		snapshot: {
 			canTakeSnapshot: true
 		},
@@ -50,27 +18,28 @@ define( ["jquery", "./d3.min", 'text!./styles.css' ], function ( $, cssContent )
 		  
 		  var html = '<div id="states"></div>';
 		  $element.html( html );		  
-		  
 
 		  var width = 800;
 		  var height = 500;
 		  
-		  var rectWidth = 50;
-		  var rectHeight = 50;
-		  var rectDistance = 3;
-		  var rectBorderColor = "black";
-		  var rectBorderWidth = 2;
+		  var rectWH = layout.rectWidthHeight.split('/');	
+		  var rectWidth = parseInt( rectWH[0] );
+		  var rectHeight = parseInt( rectWH[1] );
+		  var rectDistance = parseInt( layout.rectDistance );
+		  var rectBorderColor = layout.rectBorderColor;
+		  var rectBorderWidth = parseInt( layout.rectBorderWidth );
 		  var rectOpacity = 0.4;
-		  var rectFill = "gray";
-		  var rectNullFill = "gray";
+		  var rectFill = layout.rectFill;
+		  var rectNullFill = layout.rectNullFill;
+		  var rectSelectingColor = layout.rectSelectingColor;
 		  
-		  var titleColor = 'purple';
-		  var titleSize = '16';
-		  var titleFamily = 'Arial';
+		  var titleColor = layout.titleColor;
+		  var titleSize = layout.titleSize;
+		  var titleFamily = layout.titleFontFamily;
 		  
-		  var valueColor = 'blue';
-		  var valueSize = '19';
-		  var valueFamily = 'Arial Black';
+		  var valueColor = layout.valuesColor;
+		  var valueSize = layout.valuesSize;
+		  var valueFamily = layout.valuesFontFamily;
 		  
 		  var id = 1;
 		  
@@ -106,13 +75,11 @@ define( ["jquery", "./d3.min", 'text!./styles.css' ], function ( $, cssContent )
 				matrix = layout.qHyperCube.qDataPages[0].qMatrix;
 		  
 		  var data = [];
-		  //console.log(matrix)
 		  
 		  matrix.forEach(function ( row ) {
 			var val = {value:  row[1].qText, name:  row[0].qText, elemNo: row[0].qElemNumber };
 			data.push( val )
 		  });
-		  //console.log(data)
 
 		  var svg = d3.select("#states")
 				.append("svg:svg")
@@ -128,18 +95,15 @@ define( ["jquery", "./d3.min", 'text!./styles.css' ], function ( $, cssContent )
 				
 				if( resultObject ) {
 				  nameIter = resultObject.name;				  
-				  //console.log( resultObject.name )
 				}
 				
 				if( nameIter ) {
 				  var dataObject = searchData(nameIter, data);
-				  //console.log(nameIter)
-				  //console.log(dataObject)
 				}
 				
 				if( resultObject ) {
 				  svg.append("text")
-					  .attr("x", (rectWidth + rectDistance) * i + ( rectWidth /3.5))
+					  .attr("x", (rectWidth + rectDistance) * i + ( rectWidth / 3.5))
 					  .attr("y", (rectHeight + rectDistance) * a + 15)
 					  .text(function(d) { return resultObject.name; })
 					  .attr("font-family", titleFamily)
@@ -152,15 +116,15 @@ define( ["jquery", "./d3.min", 'text!./styles.css' ], function ( $, cssContent )
 					  })
 				}		
 
-				  if( dataObject ) {    
+				 if( dataObject ) {    
 					svg.append("text")
-						.attr("x", (rectWidth + rectDistance) * i + ( rectWidth /3.5))
-						.attr("y", (rectHeight + rectDistance) * a + (rectHeight /1.1))
+						.attr("x", (rectWidth + rectDistance) * i + ( rectWidth / 3.5))
+						.attr("y", (rectHeight + rectDistance) * a + (rectHeight / 1.1))
 						.text(function(d) { return dataObject.value; })
 						.attr("font-family", valueFamily)
 						.attr("font-size", valueSize + "px")
 						.attr("fill", valueColor)
-				  }				
+				 }				
 				
 				if( hiddenId.indexOf( id ) == -1 ) {
 				  var rectangle = svg.append("rect")
@@ -169,15 +133,14 @@ define( ["jquery", "./d3.min", 'text!./styles.css' ], function ( $, cssContent )
 										.attr("width", rectWidth)
 										.attr("height", rectHeight)
 										.attr("elemno", function(d) {
-											//console.log( dataObject );
 											if( dataObject ) {
 											return dataObject.elemNo;
 											}
 										
 										})
-										.style("fill", /*rectFill*/ function(d) {
+										.style("fill", function(d) {
 										  if(dataObject) {
-											return "gray"//colorScale(dataObject.value)
+											return rectFill
 										  } else {
 											return rectNullFill
 										  }
@@ -198,9 +161,8 @@ define( ["jquery", "./d3.min", 'text!./styles.css' ], function ( $, cssContent )
 										.on({
 											  "click":  function() {  
 												var elemNo = $(this);
-												//console.log( elemNo.attr('elemno') ) 
 												self.selectValues( 0, [ parseInt(elemNo.attr('elemno')) ], true );
-												d3.select(this).style('fill', "yellow");
+												d3.select(this).style('fill', rectSelectingColor);
 											  }, 
 										});
 				}
