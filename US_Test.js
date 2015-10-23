@@ -2,11 +2,12 @@ define( [
 			"jquery",
 			'./properties',
 			'./initialproperties',
-			'text!./styles.css',
-			"./d3.min"
-], function ( $, props, initProps, cssContent, d3 ) {
+			'text!./HexagonalBinning.css',
+			"./d3.min",
+			"./lasso_adj"
+], function ( $, props, initProps, cssContent) {
 	'use strict';
-	//$('<link rel="stylesheet" type="text/css" href="/extensions/US_Test/styles.css">').appendTo("head");
+		$("<style>").html(cssContent).appendTo("head");
 	return {
 		definition: props,
         initialProperties: initProps,
@@ -42,6 +43,7 @@ define( [
 		  var valueFamily = layout.valuesFontFamily;
 		  
 		  var id = 1;
+		  var binningMode = 10
 		  
 		  var hiddenId = [1,2,3,4,5,6,7,8,9,10,11,13,14,15,16,17,18,20,21,22,25,33,36,37,49,60,61,62,71,72,73,74,75,76,91,82,83,84,87,88,90,92,93,95,96];
 		  
@@ -68,7 +70,66 @@ define( [
 					  return myArray[i];
 				  }
 			  }
-		  }		
+		  }
+		  
+			var lasso_start = function() {
+				// keep mouse cursor arrow instead of text select (auto)
+				//$("#"+id).css('cursor','default');
+				
+				// clear all of the fills 
+				if (binningMode > 0) {
+					// Area binning mode
+					lasso.items()
+						.style("fill",null);
+				}
+
+				lasso.items()
+					.classed({"not_possible":true,"selected":false}); // style as not possible
+			};
+			
+	var lasso_draw = function() {
+		// Style the possible dots
+		lasso.items().filter(function(d) {return d.possible===true})
+			.classed({"not_possible":false,"possible":true})
+			.style('fill', rectSelectingColor)
+			.style("stroke-width", 4)			
+			;
+
+		// Style the not possible dot
+		lasso.items().filter(function(d) {return d.possible===false})
+			.classed({"not_possible":true,"possible":false});
+	};
+
+	var lasso_end = function(data) {
+		var selectedItems = lasso.items().filter(function(d) {return d.selected===true});	
+		console.log(selectedItems)
+		if (selectedItems[0].length > 0) {			
+			// Set up an array to store the data points in the selected hexagon
+			var selectarray = [];
+			//Push the Dim1_key from the data array to get the unique selected values
+			for (var index = 0; index < selectedItems[0].length; index++) {
+				//for (var item = 0; item < selectedItems[0][index].__data__.length; item++) {
+					//selectarray.push(selectedItems[0][index].__data__[item][3]);	
+					var s = selectedItems[0][index].outerHTML;
+					var t = s.substring( s.indexOf('elemno') )
+						t = t.substring( 0, t.indexOf(' ') )
+						t = t.replace(/\D/g,'');
+					selectarray.push( parseInt(t) )
+				//}
+			}
+			console.log(selectarray);
+			
+			//Make the selections
+			self.selectValues(0,selectarray,false);
+		} else {
+			if (binningMode > 0) {
+				lasso.items()
+					.style("fill", function(d) { return areaColor; });
+			}
+		}
+	};			
+			
+		  
 
 			var self = this,
 				dimensions = layout.qHyperCube.qDimensionInfo,
@@ -133,9 +194,13 @@ define( [
 										.attr("width", rectWidth)
 										.attr("height", rectHeight)
 										.attr("elemno", function(d) {
-											if( dataObject ) {
+											//if( dataObject ) {
+												try {
 											return dataObject.elemNo;
-											}
+												} catch (ex) {
+													
+												}
+											//}
 										
 										})
 										.style("fill", function(d) {
@@ -168,7 +233,20 @@ define( [
 				}
 				id++;
 			  }
-			}		
+			}
+
+			var lasso_area = d3.selectAll("rect");
+			var lasso = d3.lasso()
+				  .closePathDistance(75)
+				  .closePathSelect(true)
+				  .hoverSelect(true)
+				  .area(lasso_area)
+				  .on("start",lasso_start)
+				  .on("draw",lasso_draw)
+				  .on("end",lasso_end);
+
+				  svg.call(lasso);	
+			lasso.items(d3.selectAll("rect"));					
 		}
 	};
 
