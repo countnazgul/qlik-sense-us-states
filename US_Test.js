@@ -20,8 +20,8 @@ define( [
 		  var html = '<div id="states"></div>';
 		  $element.html( html );		  
 
-		  var width = 800;
-		  var height = 500;
+		  var width = $element.context.clientWidth;
+		  var height = $element.context.clientHeight;
 		  
 		  var gnrlUseLasso = layout.rectUseLasso;
 		  
@@ -51,12 +51,12 @@ define( [
 		  var hiddenId = [1,2,3,4,5,6,7,8,9,10,11,13,14,15,16,17,18,20,21,22,25,33,36,37,49,60,61,62,71,72,73,74,75,76,91,82,83,84,87,88,90,92,93,95,96];
 		  
 		  var names = [
-			  { id:12, name:"ME", order:0},{ id:19, name:"WI", order:1},{ id:23, name:"VT", order:2}, {id:24, name:"NH", order:3},{ id:26, name:"WA", order:4},{ id:27, name:"ID", order:5},{ id:28, name:"MT", order:6},{ id:29, name:"ND", order:7},{ id:30, name:"MN", order:8},
-			  { id:31, name:"IL", order:9},{ id:32, name:"MI", order:10},{ id:34, name:"NY", order:11},{ id:35, name:"MA", order:12},{ id:38, name:"OR", order:13},{ id:39, name:"NV", order:14},{ id:40, name:"WY", order:15},{ id:41, name:"SD", order:16},{ id:42, name:"IA", order:17},
-			  { id:43, name:"IN", order:18},{ id:44, name:"OH", order:19},{ id:45, name:"PA", order:20},{ id:46, name:"NJ", order:21},{ id:47, name:"CT", order:22},{ id:48, name:"RI", order:23},{ id:50, name:"CA", order:24},{ id:51, name:"UT", order:25},{ id:52, name:"CO", order:26},
-			  { id:53, name:"NE", order:27},{ id:54, name:"MO", order:28},{ id:55, name:"KY", order:29},{ id:56, name:"WV", order:30},{ id:57, name:"VA", order:31},{ id:58, name:"MD", order:32},{ id:59, name:"DE", order:33},{ id:63, name:"AZ", order:34},{ id:64, name:"NM", order:35},
-			  { id:65, name:"KS", order:36},{ id:66, name:"AR", order:37},{ id:67, name:"TN", order:38},{ id:68, name:"NC", order:39},{ id:69, name:"SC", order:40},{ id:70, name:"DS", order:41},{ id:77, name:"OK", order:42},{ id:78, name:"LA", order:43},{ id:79, name:"MS", order:44},
-			  { id:80, name:"AL", order:45},{ id:81, name:"GA", order:46},{ id:85, name:"HI", order:47},{ id:86, name:"AK", order:48},{ id:89, name:"TX", order:49},{ id:94, name:"FL", order:50}
+			  { id:12, name:"ME"},{ id:19, name:"WI"},{ id:23, name:"VT"}, {id:24, name:"NH"},{ id:26, name:"WA"},{ id:27, name:"ID"},{ id:28, name:"MT"},{ id:29, name:"ND"},{ id:30, name:"MN"},
+			  { id:31, name:"IL"},{ id:32, name:"MI"},{ id:34, name:"NY"},{ id:35, name:"MA"},{ id:38, name:"OR"},{ id:39, name:"NV"},{ id:40, name:"WY"},{ id:41, name:"SD"},{ id:42, name:"IA"},
+			  { id:43, name:"IN"},{ id:44, name:"OH"},{ id:45, name:"PA"},{ id:46, name:"NJ"},{ id:47, name:"CT"},{ id:48, name:"RI"},{ id:50, name:"CA"},{ id:51, name:"UT"},{ id:52, name:"CO"},
+			  { id:53, name:"NE"},{ id:54, name:"MO"},{ id:55, name:"KY"},{ id:56, name:"WV"},{ id:57, name:"VA"},{ id:58, name:"MD"},{ id:59, name:"DE"},{ id:63, name:"AZ"},{ id:64, name:"NM"},
+			  { id:65, name:"KS"},{ id:66, name:"AR"},{ id:67, name:"TN"},{ id:68, name:"NC"},{ id:69, name:"SC"},{ id:70, name:"DS"},{ id:77, name:"OK"},{ id:78, name:"LA"},{ id:79, name:"MS"},
+			  { id:80, name:"AL"},{ id:81, name:"GA"},{ id:85, name:"HI"},{ id:86, name:"AK"},{ id:89, name:"TX"},{ id:94, name:"FL"}
 		  ];		  			
 		  
 		  function search(nameKey, myArray){
@@ -164,28 +164,37 @@ define( [
 				}
 				
 				if( resultObject ) {
-				  svg.append("text")
-					  .attr("x", (rectWidth + rectDistance) * i + ( rectWidth / 3.5))
-					  .attr("y", (rectHeight + rectDistance) * a + 15)
+				  var title = svg.append("text")					  
 					  .text(function(d) { return resultObject.name; })
 					  .attr("font-family", titleFamily)
 					  .attr("font-size", titleSize + "px")
 					  .attr("fill", titleColor)
+					  //.attr("text-anchor", "middle")
 					  .attr("class", function(d) {
-						if(!dataObject) {
+						if(!dataObject) {							
 						  return "empty"
 						}
+					  })
+					  .attr("x",  function() {
+						return (((rectWidth + rectDistance) * i) + ( rectWidth / 2 - this.getComputedTextLength() / 2 )) }
+					  )
+					  .attr("y", function() {						  
+						  return (rectHeight + rectDistance) * a + this.getBoundingClientRect().height / 2 + rectHeight * 0.1
 					  })
 				}		
 
 				 if( dataObject ) {    
 					svg.append("text")
-						.attr("x", (rectWidth + rectDistance) * i + ( rectWidth / 3.5))
-						.attr("y", (rectHeight + rectDistance) * a + (rectHeight / 1.1))
 						.text(function(d) { return dataObject.value; })
 						.attr("font-family", valueFamily)
 						.attr("font-size", valueSize + "px")
 						.attr("fill", valueColor)
+					    .attr("x",  function() {							
+							return (((rectWidth + rectDistance) * i) + ( rectWidth / 2 - this.getComputedTextLength() / 2 )) }
+						)
+					  .attr("y", function() {						  
+						  return (rectHeight + rectDistance) * a + rectHeight - rectHeight * 0.1
+					  })						
 				 }				
 				
 				if( hiddenId.indexOf( id ) == -1 ) {
