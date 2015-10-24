@@ -13,7 +13,7 @@ define( [], function () {
 	var measures = {
 		uses: "measures",
 		min: 1,
-		max: 1
+		max: 2
 	};
 
 	var sorting = {
@@ -165,6 +165,16 @@ define( [], function () {
 		defaultValue: "Arial Black"
 	};		
 	
+    var titleColor = {
+        ref: "props.titleColor",
+        label: "Title color",
+        type: "string",
+        expression: "optional",
+        show: function ( data ) {
+            return data.props && data.props.layoutMode === 'custom';
+        }
+	}
+			
 	
 
 //)};
@@ -181,17 +191,8 @@ define( [], function () {
 			measures: measures,
 			sorting: sorting,
 			appearance: {
-				uses: "settings",
-				items: {
-					settings: {
-						type: "items",
-						label: "Settings",
-						items: {
-							testSetting: showMyAccordion
-						}
-					}
-				}
-			},
+				 uses: "settings"
+		   },
 			myCustomSection: {
 				//type: "items", //<== not necessary to define "items"
 				component: "expandable-items",
