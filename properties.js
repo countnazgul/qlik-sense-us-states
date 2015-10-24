@@ -131,6 +131,14 @@ define( [], function () {
 		expression: "optional",
 		defaultValue: "16"	
 	};
+	
+	var propTitleDynamicSize = {
+		ref: "titleDynamicSize",
+		label: "Dynamic Font Size",
+		type: "boolean",
+		expression: "optional",
+		defaultValue: false
+	};	
 
 	var propTitleFamily = {
 		ref: "titleFontFamily",
@@ -156,6 +164,14 @@ define( [], function () {
 		expression: "optional",
 		defaultValue: "19"	
 	};
+	
+	var propValuesDynamicSize = {
+		ref: "valuesDynamicSize",
+		label: "Dynamic Font Size",
+		type: "boolean",
+		expression: "optional",
+		defaultValue: false
+	};		
 
 	var propValuesFamily = {
 		ref: "valuesFontFamily",
@@ -224,18 +240,20 @@ define( [], function () {
 						type: "items",
 						label: "Titles",
 						items: {
-							header2_item1: propTitleColor,
-							header2_item2: propTitleSize,
-							header2_item3: propTitleFamily							
+							header2_item1: propTitleDynamicSize,
+							header2_item2: propTitleColor,
+							header2_item3: propTitleSize,
+							header2_item4: propTitleFamily							
 						}
 					},
 					header3: {
 						type: "items",
 						label: "Values",
 						items: {
-							header3_item1: propValuesColor,
-							header3_item2: propValuesSize,
-							header3_item3: propValuesFamily							
+							header3_item1: propValuesDynamicSize,
+							header3_item2: propValuesColor,
+							header3_item3: propValuesSize,
+							header3_item4: propValuesFamily							
 						}
 					}
 				}

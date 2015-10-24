@@ -3,7 +3,7 @@
 	"description": "Simplified US states map. https://github.com/countnazgul/qlik-sense-us-states",
 	"icon": "treemap",
 	"type": "visualization",
-	"version": "0.7.5",
+	"version": "0.7.7",
 	"preview": "preview.png",
 	"author": "",
 	"homepage": "",

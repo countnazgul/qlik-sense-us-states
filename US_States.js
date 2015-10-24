@@ -46,10 +46,12 @@ define( [
 		  var rectSelectingColor = layout.rectSelectingColor;
 		  var rectSelectingNullColor = layout.rectSelectingNullColor;		  
 		  
+		  var titleDynamicSize = layout.titleDynamicSize;
 		  var titleColor = layout.titleColor;
 		  var titleSize = layout.titleSize;
 		  var titleFamily = layout.titleFontFamily;
 		  
+		  var valuesDynamicSize = layout.valuesDynamicSize;
 		  var valueColor = layout.valuesColor;
 		  var valueSize = layout.valuesSize;
 		  var valueFamily = layout.valuesFontFamily;
@@ -178,7 +180,13 @@ define( [
 				  var title = svg.append("text")					  
 					  .text(function(d) { return resultObject.name; })
 					  .attr("font-family", titleFamily)
-					  .attr("font-size", titleSize + "px")
+					  .attr("font-size", function() {
+						  if( titleDynamicSize == true ) {
+							return rectHeight / 3.125
+						  } else {
+							return titleSize;  
+						  }						  
+					  })
 					  .attr("fill", titleColor)
 					  .attr("class", function(d) {
 						if(!dataObject) {							
@@ -197,7 +205,13 @@ define( [
 					svg.append("text")
 						.text(function(d) { return dataObject.value; })
 						.attr("font-family", valueFamily)
-						.attr("font-size", valueSize + "px")
+						.attr("font-size", function() {
+							if( valuesDynamicSize == true ) {
+								return rectHeight / 2.631
+							} else {
+								return valueSize;
+							}						  
+						})
 						.attr("fill", valueColor)
 					    .attr("x",  function() {							
 							return (((rectWidth + rectDistance) * i) + ( rectWidth / 2 - this.getComputedTextLength() / 2 )) }
