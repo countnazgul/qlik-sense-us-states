@@ -13,8 +13,8 @@ Max two expressions can be used:
 ##### Selecting
 You can use the usual click selection method (default) or using the d3 lasso (https://github.com/skokenes/D3-Lasso-Plugin)
 
-#### Options
+##### Options
 Various options are available to control the colors and fonts properties of the rectangles, titles and values. 
 Also through the options the whole chart can be made to auto size dynamically based on the size of the object and the screen resolution. 
 
-Gifs how the auto size and the lasso are used can be found [here]()
+Gifs how the auto size and the lasso are used can be found [here](https://github.com/countnazgul/qlik-sense-us-states/tree/master/media)
