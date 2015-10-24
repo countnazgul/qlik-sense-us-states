@@ -2,7 +2,7 @@ define( [
 			"jquery",
 			'./properties',
 			'./initialproperties',
-			'text!./HexagonalBinning.css',
+			'text!./d3_lasso.css',
 			"./d3.min",
 			"./lasso_adj"
 ], function ( $, props, initProps, cssContent) {
@@ -17,7 +17,7 @@ define( [
 
 		paint: function ( $element, layout ) {
 		  
-		  var html = '<div id="states"></div>';
+		  var html = '<div id="states" style="padding: 5px;"></div>';
 		  $element.html( html );		  
 
 		  var width = $element.context.clientWidth;
@@ -104,7 +104,7 @@ define( [
 				lasso.items().filter(function(d) {return d.possible===true})
 					.classed({"not_possible":false,"possible":true})
 					.style('fill', rectSelectingColor)
-					//.style("stroke-width", 4)			
+					//.style("stroke-width", 4)
 					;
 
 				// Style the not possible dot
@@ -114,7 +114,6 @@ define( [
 
 			var lasso_end = function(data) {
 				var selectedItems = lasso.items().filter(function(d) {return d.selected===true});	
-				//console.log(selectedItems)
 				if (selectedItems[0].length > 0) {			
 					// Set up an array to store the data points in the selected hexagon
 					var selectarray = [];
@@ -129,7 +128,6 @@ define( [
 							selectarray.push( parseInt(t) )
 						//}
 					}
-					//console.log(selectarray);
 					
 					//Make the selections
 					self.selectValues(0,selectarray,true);
@@ -144,7 +142,6 @@ define( [
 			var self = this,
 				dimensions = layout.qHyperCube.qDimensionInfo,
 				matrix = layout.qHyperCube.qDataPages[0].qMatrix;
-				console.log( matrix );
 		  
 			var data = [];
 		  
@@ -183,7 +180,6 @@ define( [
 					  .attr("font-family", titleFamily)
 					  .attr("font-size", titleSize + "px")
 					  .attr("fill", titleColor)
-					  //.attr("text-anchor", "middle")
 					  .attr("class", function(d) {
 						if(!dataObject) {							
 						  return "empty"
@@ -220,7 +216,7 @@ define( [
 										.attr("elemno", function(d) {
 											//if( dataObject ) {
 												try {
-											return dataObject.elemNo;
+													return dataObject.elemNo;
 												} catch (ex) {
 													
 												}

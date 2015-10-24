@@ -1,9 +1,9 @@
 {
-	"name": "US_Test",
-	"description": "",
-	"icon": "bar-chart-vertical",
+	"name": "US States",
+	"description": "Simplified US states map. https://github.com/countnazgul/qlik-sense-us-states",
+	"icon": "treemap",
 	"type": "visualization",
-	"version": "0.7.4",
+	"version": "0.7.5",
 	"preview": "preview.png",
 	"author": "",
 	"homepage": "",
