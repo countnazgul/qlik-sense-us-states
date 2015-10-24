@@ -44,6 +44,14 @@ define( [], function () {
 	};	
 	
 // Rectangle properties
+	var propRectDynamicWidthHeight = {
+		ref: "rectDynamicWidthHeight",
+		label: "Dynamic Width/Height",
+		type: "boolean",
+		expression: "optional",
+		defaultValue: "false"
+	};
+	
 	var propRectWidthHeight = {
 		ref: "rectWidthHeight",
 		label: "Width/Height",
@@ -200,14 +208,15 @@ define( [], function () {
 						type: "items",
 						label: "Rectangles",
 						items: {
-							header1_item1: propRectWidthHeight,
-							header1_item2: propRectDistance,
-							header1_item3: propRectBorderColor,
-							header1_item4: propRectBorderWidth,
-							header1_item5: propRectFill,
-							header1_item6: propNullFill,
-							header1_item7: propRectSelectingActiveColor,							
-							header1_item8: propRectSelectingNonActiveColor,
+							header1_item1: propRectDynamicWidthHeight,
+							header1_item2: propRectWidthHeight,
+							header1_item3: propRectDistance,
+							header1_item4: propRectBorderColor,
+							header1_item5: propRectBorderWidth,
+							header1_item6: propRectFill,
+							header1_item7: propNullFill,
+							header1_item8: propRectSelectingActiveColor,							
+							header1_item9: propRectSelectingNonActiveColor,
 						}
 					},
 					header2: {

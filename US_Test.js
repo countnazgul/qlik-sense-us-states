@@ -23,17 +23,20 @@ define( [
 		  var width = $element.context.clientWidth;
 		  var height = $element.context.clientHeight;		  
 		  
-		  var size = Math.min( width, height );
-		  size = Math.floor( size / 14 );
-		  console.log( size )
+		  var size = Math.min( width / 12, height / 8 );
+		  size = Math.floor( size * 0.9 );
 		  
 		  var gnrlUseLasso = layout.rectUseLasso;
 		  
-		  var rectWH = layout.rectWidthHeight.split('/');	
-		  //var rectWidth = parseInt( rectWH[0] );
-		  //var rectHeight = parseInt( rectWH[1] );
-		  var rectWidth = size;
-		  var rectHeight = size;
+		  if( layout.rectDynamicWidthHeight == true ) {
+			var rectWidth = size;
+			var rectHeight = size;
+		  } else {
+			var rectWH = layout.rectWidthHeight.split('/');	
+			var rectWidth = parseInt( rectWH[0] );
+			var rectHeight = parseInt( rectWH[1] );
+		  }
+		  
 		  var rectDistance = parseInt( layout.rectDistance );
 		  var rectBorderColor = layout.rectBorderColor;
 		  var rectBorderWidth = parseInt( layout.rectBorderWidth );
