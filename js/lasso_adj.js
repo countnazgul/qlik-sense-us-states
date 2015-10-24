@@ -1,4 +1,4 @@
-define(["jquery", "text!./HexagonalBinning.css","./d3.min"], function($, cssContent) {'use strict';	
+define(["jquery", "text!../css/d3_lasso.css","./d3.min"], function($, cssContent) {'use strict';	
 	$("<style>").html(cssContent).appendTo("head");
 	d3.lasso = function() {
 
@@ -40,7 +40,7 @@ define(["jquery", "text!./HexagonalBinning.css","./d3.min"], function($, cssCont
         area.call(drag);
 
         function dragstart() {
-            // Reset blank lasso path
+            // Reset blank lasso path.
             path="";
             tpath = "";
             dyn_path.attr("d",null);

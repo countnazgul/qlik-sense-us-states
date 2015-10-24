@@ -1,10 +1,10 @@
 define( [
 			"jquery",
-			'./properties',
-			'./initialproperties',
-			'text!./d3_lasso.css',
-			"./d3.min",
-			"./lasso_adj"
+			'./js/properties',
+			'./js/initialproperties',
+			'text!./css/d3_lasso.css',
+			"./js/d3.min",
+			"./js/lasso_adj"
 ], function ( $, props, initProps, cssContent) {
 	'use strict';
 		$("<style>").html(cssContent).appendTo("head");
